@@ -156,5 +156,1690 @@
 
   <footer><div class="container">© 2026 Matthew Quillinan</div></footer>
   <script src="script.js"></script>
+<!-- =========================================================
+     WHERE I'VE FLOWN — INTERACTIVE PILOT MAP
+========================================================= -->
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<section id="flight-map-section">
+
+  <div class="flight-map-header">
+
+    <div class="flight-map-title-area">
+      <p class="map-eyebrow">FLIGHT EXPERIENCE</p>
+
+      <h2>WHERE I’VE FLOWN</h2>
+
+      <div class="map-title-line">
+        <span></span>
+        ✈
+      </div>
+
+      <p class="map-subtitle">
+        Every airport I’ve flown into. Click any airport to see details.
+      </p>
+    </div>
+
+
+    <div class="flight-stat-grid">
+
+      <div class="flight-stat-card">
+        <div class="flight-stat-icon">📍</div>
+
+        <div>
+          <strong id="airportCount">0</strong>
+          <span>AIRPORTS</span>
+          <small>Total Unique</small>
+        </div>
+      </div>
+
+
+      <div class="flight-stat-card">
+        <div class="flight-stat-icon">✈</div>
+
+        <div>
+          <strong id="flightCount">0</strong>
+          <span>FLIGHTS</span>
+          <small>Total Visits</small>
+        </div>
+      </div>
+
+
+      <div class="flight-stat-card">
+        <div class="flight-stat-icon">🌎</div>
+
+        <div>
+          <strong id="stateCount">0</strong>
+          <span>STATES</span>
+          <small>Flown To</small>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- MAP -->
+
+  <div class="map-wrapper">
+
+    <div id="pilotMap"></div>
+
+    <div class="map-legend">
+
+      <strong>NUMBER OF VISITS</strong>
+
+      <div>
+        <span class="legend-dot visit-1"></span>
+        1 Visit
+      </div>
+
+      <div>
+        <span class="legend-dot visit-2"></span>
+        2–3 Visits
+      </div>
+
+      <div>
+        <span class="legend-dot visit-3"></span>
+        4–6 Visits
+      </div>
+
+      <div>
+        <span class="legend-dot visit-4"></span>
+        7+ Visits
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- CONTROLS -->
+
+  <div class="map-controls">
+
+    <div class="airport-search">
+      <span>⌕</span>
+
+      <input
+        id="airportSearch"
+        type="text"
+        placeholder="Search airport or city..."
+      >
+    </div>
+
+
+    <select id="stateFilter">
+      <option value="all">All States</option>
+    </select>
+
+
+    <select id="visitFilter">
+
+      <option value="all">
+        All Visit Counts
+      </option>
+
+      <option value="1">
+        1 Visit
+      </option>
+
+      <option value="2">
+        2–3 Visits
+      </option>
+
+      <option value="4">
+        4–6 Visits
+      </option>
+
+      <option value="7">
+        7+ Visits
+      </option>
+
+    </select>
+
+  </div>
+
+
+
+  <!-- RECENTLY FLOWN -->
+
+  <div class="recent-airports">
+
+    <div class="recent-header">
+
+      <h3>RECENTLY FLOWN</h3>
+
+      <button id="resetMapButton">
+        RESET MAP
+      </button>
+
+    </div>
+
+    <div
+      id="recentAirportGrid"
+      class="recent-airport-grid"
+    ></div>
+
+  </div>
+
+</section>
+
+
+
+<style>
+
+/* =========================================================
+   FLIGHT MAP SECTION
+========================================================= */
+
+#flight-map-section {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(15, 90, 140, .16),
+      transparent 40%
+    ),
+    #031321;
+
+  color: #ffffff;
+
+  padding: 80px 5%;
+
+  border-top:
+    1px solid rgba(255,255,255,.08);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+.flight-map-header {
+  max-width: 1450px;
+
+  margin: 0 auto 35px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 50px;
+
+  align-items: flex-end;
+}
+
+
+.map-eyebrow {
+  color: #d6a958;
+
+  font-size: 12px;
+
+  letter-spacing: 3px;
+
+  font-weight: 700;
+
+  margin-bottom: 10px;
+}
+
+
+.flight-map-title-area h2 {
+  font-size: clamp(38px, 5vw, 62px);
+
+  margin: 0;
+
+  letter-spacing: 2px;
+
+  font-weight: 800;
+}
+
+
+.map-subtitle {
+  color: #c7d0d8;
+
+  font-size: 16px;
+
+  margin-top: 14px;
+
+  line-height: 1.6;
+}
+
+
+.map-title-line {
+  width: 100%;
+
+  max-width: 430px;
+
+  height: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  margin-top: 5px;
+
+  color: #ffffff;
+}
+
+
+.map-title-line span {
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #d7aa58 0 15%,
+      white 15% 100%
+    );
+
+  flex: 1;
+}
+
+
+.map-title-line {
+  font-size: 20px;
+}
+
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.flight-stat-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(150px, 1fr));
+
+  gap: 16px;
+}
+
+
+.flight-stat-card {
+  border:
+    1px solid rgba(255,255,255,.16);
+
+  background:
+    rgba(0, 12, 24, .55);
+
+  border-radius: 9px;
+
+  padding: 22px 26px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  min-width: 170px;
+
+  backdrop-filter: blur(10px);
+}
+
+
+.flight-stat-icon {
+  font-size: 29px;
+
+  opacity: .9;
+}
+
+
+.flight-stat-card strong {
+  display: block;
+
+  color: #e0b45e;
+
+  font-size: 31px;
+
+  line-height: 1;
+}
+
+
+.flight-stat-card span {
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  margin-top: 7px;
+
+  letter-spacing: .8px;
+}
+
+
+.flight-stat-card small {
+  display: block;
+
+  color: #aab4be;
+
+  margin-top: 5px;
+
+  font-size: 11px;
+}
+
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.map-wrapper {
+  max-width: 1450px;
+
+  margin: auto;
+
+  position: relative;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(255,255,255,.14);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.28);
+}
+
+
+#pilotMap {
+  width: 100%;
+
+  height: 620px;
+
+  background: #071c2a;
+}
+
+
+.leaflet-control-attribution {
+  font-size: 9px !important;
+}
+
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+
+  padding: 0;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.35);
+}
+
+
+.leaflet-popup-content {
+  margin: 0 !important;
+
+  width: 300px !important;
+}
+
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.airport-popup {
+  color: #15202b;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  padding: 20px;
+}
+
+
+.airport-popup-code {
+  color: #1164ba;
+
+  font-size: 27px;
+
+  font-weight: 800;
+
+  margin-bottom: 4px;
+}
+
+
+.airport-popup-name {
+  font-weight: 700;
+
+  font-size: 14px;
+}
+
+
+.airport-popup-location {
+  color: #66717c;
+
+  font-size: 12px;
+
+  margin-top: 3px;
+
+  margin-bottom: 15px;
+}
+
+
+.airport-popup-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 10px 0;
+
+  border-top:
+    1px solid #e1e5e9;
+
+  font-size: 12px;
+}
+
+
+.airport-popup-row span:first-child {
+  color: #6d7780;
+}
+
+
+.airport-popup button {
+  width: 100%;
+
+  margin-top: 10px;
+
+  border: none;
+
+  background: #03182b;
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  letter-spacing: .6px;
+
+  padding: 12px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+
+
+/* =========================================================
+   CUSTOM MAP MARKERS
+========================================================= */
+
+.pilot-airport-marker {
+  border-radius: 50%;
+
+  border: 1.5px solid white;
+
+  background: #1776ff;
+
+  box-shadow:
+    0 0 0 2px rgba(20,110,255,.16);
+
+  transition:
+    transform .2s ease;
+}
+
+
+.pilot-airport-marker:hover {
+  transform: scale(1.25);
+}
+
+
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.map-legend {
+  position: absolute;
+
+  z-index: 500;
+
+  bottom: 20px;
+
+  left: 20px;
+
+  background:
+    rgba(2, 20, 35, .92);
+
+  padding: 16px 18px;
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  border-radius: 9px;
+
+  font-size: 11px;
+
+  box-shadow:
+    0 15px 30px rgba(0,0,0,.25);
+}
+
+
+.map-legend strong {
+  display: block;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 12px;
+}
+
+
+.map-legend div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 8px;
+}
+
+
+.legend-dot {
+  display: inline-block;
+
+  border-radius: 50%;
+
+  background: #1776ff;
+
+  border: 1px solid white;
+}
+
+
+.visit-1 {
+  width: 7px;
+  height: 7px;
+}
+
+
+.visit-2 {
+  width: 9px;
+  height: 9px;
+}
+
+
+.visit-3 {
+  width: 12px;
+  height: 12px;
+}
+
+
+.visit-4 {
+  width: 15px;
+  height: 15px;
+}
+
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.map-controls {
+  max-width: 1450px;
+
+  margin: 20px auto 0;
+
+  display: flex;
+
+  gap: 16px;
+}
+
+
+.airport-search {
+  flex: 1;
+
+  max-width: 380px;
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  border-radius: 6px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding-left: 12px;
+
+  background:
+    rgba(0,0,0,.12);
+}
+
+
+.airport-search span {
+  color: #7d8c99;
+
+  margin-right: 8px;
+}
+
+
+.airport-search input {
+  width: 100%;
+
+  color: white;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  padding: 13px 10px;
+
+  font-size: 12px;
+}
+
+
+.airport-search input::placeholder {
+  color: #7d8c99;
+}
+
+
+.map-controls select {
+  background: #031626;
+
+  color: #ffffff;
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  border-radius: 6px;
+
+  padding: 0 16px;
+
+  min-width: 155px;
+}
+
+
+
+/* =========================================================
+   RECENT AIRPORTS
+========================================================= */
+
+.recent-airports {
+  max-width: 1450px;
+
+  margin: 18px auto 0;
+
+  padding: 20px 0 0;
+
+  border-top:
+    1px solid rgba(255,255,255,.12);
+}
+
+
+.recent-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+.recent-header h3 {
+  font-size: 14px;
+
+  letter-spacing: 1px;
+
+  margin: 0 0 14px;
+}
+
+
+#resetMapButton {
+  background: transparent;
+
+  color: #c5d0da;
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  border-radius: 5px;
+
+  padding: 8px 14px;
+
+  cursor: pointer;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+#resetMapButton:hover {
+  color: white;
+
+  border-color:
+    rgba(255,255,255,.45);
+}
+
+
+.recent-airport-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  column-gap: 45px;
+
+  row-gap: 0;
+}
+
+
+.recent-airport {
+  display: grid;
+
+  grid-template-columns:
+    60px 1fr auto;
+
+  gap: 10px;
+
+  padding: 9px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.07);
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+
+.recent-airport:hover {
+  background:
+    rgba(255,255,255,.03);
+}
+
+
+.recent-airport strong {
+  color: white;
+}
+
+
+.recent-airport span {
+  color: #aab4be;
+}
+
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 950px) {
+
+  #flight-map-section {
+    padding:
+      60px 20px;
+  }
+
+
+  .flight-map-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 25px;
+  }
+
+
+  .flight-stat-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+
+  .flight-stat-card {
+    padding: 15px 10px;
+
+    min-width: 0;
+
+    justify-content: center;
+  }
+
+
+  .flight-stat-icon {
+    display: none;
+  }
+
+
+  .flight-stat-card strong {
+    font-size: 24px;
+  }
+
+
+  .flight-stat-card span {
+    font-size: 9px;
+  }
+
+
+  #pilotMap {
+    height: 520px;
+  }
+
+
+  .map-controls {
+    flex-direction: column;
+  }
+
+
+  .airport-search {
+    max-width: none;
+  }
+
+
+  .map-controls select {
+    height: 44px;
+  }
+
+
+  .recent-airport-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 550px) {
+
+  .flight-map-title-area h2 {
+    font-size: 34px;
+  }
+
+
+  .flight-stat-grid {
+    gap: 7px;
+  }
+
+
+  .flight-stat-card strong {
+    font-size: 20px;
+  }
+
+
+  .flight-stat-card small {
+    display: none;
+  }
+
+
+  #pilotMap {
+    height: 470px;
+  }
+
+
+  .map-legend {
+    display: none;
+  }
+
+}
+
+</style>
+
+
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<script>
+
+/* =========================================================
+   AIRPORT DATA
+   THESE ARE ONLY EXAMPLES.
+   WE WILL REPLACE THESE WITH YOUR REAL LOGBOOK DATA.
+========================================================= */
+
+const airportData = [
+
+  {
+    code: "KAVL",
+    name: "Asheville Regional Airport",
+    city: "Asheville",
+    state: "NC",
+    latitude: 35.4362,
+    longitude: -82.5418,
+    visits: 7,
+    aircraft: "C172S, PA-28",
+    lastFlown: "Jul 18, 2026"
+  },
+
+  {
+    code: "KCLT",
+    name: "Charlotte Douglas International Airport",
+    city: "Charlotte",
+    state: "NC",
+    latitude: 35.2140,
+    longitude: -80.9431,
+    visits: 4,
+    aircraft: "C172S",
+    lastFlown: "Jul 16, 2026"
+  },
+
+  {
+    code: "KIPJ",
+    name: "Lincolnton-Lincoln County Regional Airport",
+    city: "Lincolnton",
+    state: "NC",
+    latitude: 35.4833,
+    longitude: -81.1613,
+    visits: 18,
+    aircraft: "C172S, PA-28",
+    lastFlown: "Jul 15, 2026"
+  },
+
+  {
+    code: "KHKY",
+    name: "Hickory Regional Airport",
+    city: "Hickory",
+    state: "NC",
+    latitude: 35.7411,
+    longitude: -81.3895,
+    visits: 5,
+    aircraft: "C172S",
+    lastFlown: "Jul 12, 2026"
+  },
+
+  {
+    code: "KGMU",
+    name: "Greenville Downtown Airport",
+    city: "Greenville",
+    state: "SC",
+    latitude: 34.8479,
+    longitude: -82.3502,
+    visits: 3,
+    aircraft: "C172S",
+    lastFlown: "Jul 10, 2026"
+  },
+
+  {
+    code: "KRDU",
+    name: "Raleigh-Durham International Airport",
+    city: "Raleigh",
+    state: "NC",
+    latitude: 35.8801,
+    longitude: -78.7880,
+    visits: 2,
+    aircraft: "C172S",
+    lastFlown: "Jul 8, 2026"
+  },
+
+  {
+    code: "KMYR",
+    name: "Myrtle Beach International Airport",
+    city: "Myrtle Beach",
+    state: "SC",
+    latitude: 33.6797,
+    longitude: -78.9283,
+    visits: 2,
+    aircraft: "C172S",
+    lastFlown: "Jul 5, 2026"
+  },
+
+  {
+    code: "KSAV",
+    name: "Savannah / Hilton Head International Airport",
+    city: "Savannah",
+    state: "GA",
+    latitude: 32.1276,
+    longitude: -81.2021,
+    visits: 1,
+    aircraft: "C172S",
+    lastFlown: "Jun 30, 2026"
+  }
+
+];
+
+
+
+/* =========================================================
+   MAP SETUP
+========================================================= */
+
+const map = L.map(
+  "pilotMap",
+  {
+    zoomControl: true,
+    scrollWheelZoom: false
+  }
+).setView(
+  [37.8, -96],
+  4
+);
+
+
+
+/* =========================================================
+   MAP TILE STYLE
+========================================================= */
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution:
+      "&copy; OpenStreetMap contributors"
+  }
+).addTo(map);
+
+
+
+/* =========================================================
+   MARKERS
+========================================================= */
+
+let markerLayer =
+  L.layerGroup().addTo(map);
+
+let markerObjects = [];
+
+
+
+function markerSize(visits) {
+
+  if (visits >= 7) {
+    return 18;
+  }
+
+  if (visits >= 4) {
+    return 14;
+  }
+
+  if (visits >= 2) {
+    return 11;
+  }
+
+  return 8;
+
+}
+
+
+
+function airportPopup(airport) {
+
+  return `
+
+    <div class="airport-popup">
+
+      <div class="airport-popup-code">
+        ${airport.code}
+      </div>
+
+      <div class="airport-popup-name">
+        ${airport.name}
+      </div>
+
+      <div class="airport-popup-location">
+        ${airport.city}, ${airport.state}
+      </div>
+
+
+      <div class="airport-popup-row">
+
+        <span>
+          ✈ Visits
+        </span>
+
+        <strong>
+          ${airport.visits}
+        </strong>
+
+      </div>
+
+
+      <div class="airport-popup-row">
+
+        <span>
+          📅 Last Flown
+        </span>
+
+        <strong>
+          ${airport.lastFlown}
+        </strong>
+
+      </div>
+
+
+      <div class="airport-popup-row">
+
+        <span>
+          Aircraft
+        </span>
+
+        <strong>
+          ${airport.aircraft}
+        </strong>
+
+      </div>
+
+
+      <button
+        onclick="focusAirport('${airport.code}')"
+      >
+
+        VIEW AIRPORT
+
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+
+function renderMarkers(data) {
+
+  markerLayer.clearLayers();
+
+  markerObjects = [];
+
+
+  data.forEach(airport => {
+
+    const size =
+      markerSize(airport.visits);
+
+
+    const icon =
+      L.divIcon({
+
+        className: "",
+
+        html:
+          `<div
+            class="pilot-airport-marker"
+            style="
+              width:${size}px;
+              height:${size}px;
+            ">
+          </div>`,
+
+        iconSize:
+          [size, size],
+
+        iconAnchor:
+          [size / 2, size / 2],
+
+        popupAnchor:
+          [0, -(size / 2)]
+
+      });
+
+
+    const marker =
+      L.marker(
+        [
+          airport.latitude,
+          airport.longitude
+        ],
+        {
+          icon: icon
+        }
+      );
+
+
+    marker.bindPopup(
+      airportPopup(airport)
+    );
+
+
+    marker.addTo(markerLayer);
+
+
+    markerObjects.push({
+      airport,
+      marker
+    });
+
+  });
+
+}
+
+
+
+renderMarkers(airportData);
+
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+  document
+    .getElementById("airportCount")
+    .textContent =
+    airportData.length;
+
+
+  const visits =
+    airportData.reduce(
+      (total, airport) =>
+        total + airport.visits,
+      0
+    );
+
+
+  document
+    .getElementById("flightCount")
+    .textContent =
+    visits;
+
+
+  const states =
+    new Set(
+      airportData.map(
+        airport =>
+          airport.state
+      )
+    );
+
+
+  document
+    .getElementById("stateCount")
+    .textContent =
+    states.size;
+
+}
+
+
+
+updateStats();
+
+
+
+/* =========================================================
+   STATE FILTER
+========================================================= */
+
+function buildStateFilter() {
+
+  const stateFilter =
+    document.getElementById(
+      "stateFilter"
+    );
+
+
+  const states =
+    [
+      ...new Set(
+        airportData.map(
+          airport =>
+            airport.state
+        )
+      )
+    ].sort();
+
+
+  states.forEach(state => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+
+    option.value =
+      state;
+
+
+    option.textContent =
+      state;
+
+
+    stateFilter.appendChild(
+      option
+    );
+
+  });
+
+}
+
+
+
+buildStateFilter();
+
+
+
+/* =========================================================
+   SEARCH + FILTER
+========================================================= */
+
+function filterAirports() {
+
+  const search =
+    document
+      .getElementById(
+        "airportSearch"
+      )
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const state =
+    document
+      .getElementById(
+        "stateFilter"
+      )
+      .value;
+
+
+  const visit =
+    document
+      .getElementById(
+        "visitFilter"
+      )
+      .value;
+
+
+  const filtered =
+    airportData.filter(
+      airport => {
+
+        const searchText =
+
+          `${airport.code}
+           ${airport.name}
+           ${airport.city}
+           ${airport.state}`
+            .toLowerCase();
+
+
+        const matchesSearch =
+          searchText.includes(
+            search
+          );
+
+
+        const matchesState =
+          state === "all" ||
+          airport.state === state;
+
+
+        let matchesVisit =
+          true;
+
+
+        if (visit === "1") {
+
+          matchesVisit =
+            airport.visits === 1;
+
+        }
+
+
+        if (visit === "2") {
+
+          matchesVisit =
+            airport.visits >= 2 &&
+            airport.visits <= 3;
+
+        }
+
+
+        if (visit === "4") {
+
+          matchesVisit =
+            airport.visits >= 4 &&
+            airport.visits <= 6;
+
+        }
+
+
+        if (visit === "7") {
+
+          matchesVisit =
+            airport.visits >= 7;
+
+        }
+
+
+        return (
+          matchesSearch &&
+          matchesState &&
+          matchesVisit
+        );
+
+      }
+    );
+
+
+  renderMarkers(filtered);
+
+}
+
+
+
+document
+  .getElementById(
+    "airportSearch"
+  )
+  .addEventListener(
+    "input",
+    filterAirports
+  );
+
+
+document
+  .getElementById(
+    "stateFilter"
+  )
+  .addEventListener(
+    "change",
+    filterAirports
+  );
+
+
+document
+  .getElementById(
+    "visitFilter"
+  )
+  .addEventListener(
+    "change",
+    filterAirports
+  );
+
+
+
+/* =========================================================
+   RECENT AIRPORTS
+========================================================= */
+
+function renderRecentAirports() {
+
+  const container =
+    document.getElementById(
+      "recentAirportGrid"
+    );
+
+
+  container.innerHTML = "";
+
+
+  const recent =
+    airportData.slice(0, 9);
+
+
+  recent.forEach(
+    airport => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "recent-airport";
+
+
+      row.innerHTML = `
+
+        <strong>
+          ${airport.code}
+        </strong>
+
+        <span>
+          ${airport.city}, ${airport.state}
+        </span>
+
+        <span>
+          ${airport.lastFlown}
+        </span>
+
+      `;
+
+
+      row.addEventListener(
+        "click",
+        () =>
+          focusAirport(
+            airport.code
+          )
+      );
+
+
+      container.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+
+renderRecentAirports();
+
+
+
+/* =========================================================
+   FOCUS AIRPORT
+========================================================= */
+
+function focusAirport(code) {
+
+  const item =
+    markerObjects.find(
+      item =>
+        item.airport.code === code
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  map.flyTo(
+
+    [
+      item.airport.latitude,
+      item.airport.longitude
+    ],
+
+    9,
+
+    {
+      duration: 1.2
+    }
+
+  );
+
+
+  setTimeout(
+    () =>
+      item.marker.openPopup(),
+    1100
+  );
+
+}
+
+
+
+window.focusAirport =
+  focusAirport;
+
+
+
+/* =========================================================
+   RESET MAP
+========================================================= */
+
+document
+  .getElementById(
+    "resetMapButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "airportSearch"
+        )
+        .value = "";
+
+
+      document
+        .getElementById(
+          "stateFilter"
+        )
+        .value = "all";
+
+
+      document
+        .getElementById(
+          "visitFilter"
+        )
+        .value = "all";
+
+
+      renderMarkers(
+        airportData
+      );
+
+
+      map.flyTo(
+        [37.8, -96],
+        4,
+        {
+          duration: 1
+        }
+      );
+
+    }
+  );
+
+</script>
 </body>
 </html>
