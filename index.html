@@ -1115,103 +1115,50 @@
 ========================================================= */
 
 const airportData = [
+  { code: "0A9", name: "Elizabethton Municipal Airport", city: "Elizabethton", state: "TN", latitude: 36.371201, longitude: -82.173302, visits: 2 },
+  { code: "14A", name: "Lake Norman Airpark", city: "Mooresville", state: "NC", latitude: 35.612999, longitude: -80.899399, visits: 1338 },
+  { code: "20NC", name: "Mountain View Airport", city: "Sherrills Ford", state: "NC", latitude: 35.592400, longitude: -81.055901, visits: 1 },
+  { code: "3NR3", name: "Transylvania Community Airport", city: "Brevard", state: "NC", latitude: 35.270277, longitude: -82.644167, visits: 1 },
+  { code: "6NC1", name: "Little Mountain Airport", city: "Denver", state: "NC", latitude: 35.591767, longitude: -81.080421, visits: 32 },
+  { code: "BQ1", name: "Gilliam-McConnell Airfield", city: "Carthage", state: "NC", latitude: 35.341702, longitude: -79.436897, visits: 2 },
 
-  {
-    code: "KAVL",
-    name: "Asheville Regional Airport",
-    city: "Asheville",
-    state: "NC",
-    latitude: 35.4362,
-    longitude: -82.5418,
-    visits: 7,
-    aircraft: "C172S, PA-28",
-    lastFlown: "Jul 18, 2026"
-  },
-
-  {
-    code: "KCLT",
-    name: "Charlotte Douglas International Airport",
-    city: "Charlotte",
-    state: "NC",
-    latitude: 35.2140,
-    longitude: -80.9431,
-    visits: 4,
-    aircraft: "C172S",
-    lastFlown: "Jul 16, 2026"
-  },
-
-  {
-    code: "KIPJ",
-    name: "Lincolnton-Lincoln County Regional Airport",
-    city: "Lincolnton",
-    state: "NC",
-    latitude: 35.4833,
-    longitude: -81.1613,
-    visits: 18,
-    aircraft: "C172S, PA-28",
-    lastFlown: "Jul 15, 2026"
-  },
-
-  {
-    code: "KHKY",
-    name: "Hickory Regional Airport",
-    city: "Hickory",
-    state: "NC",
-    latitude: 35.7411,
-    longitude: -81.3895,
-    visits: 5,
-    aircraft: "C172S",
-    lastFlown: "Jul 12, 2026"
-  },
-
-  {
-    code: "KGMU",
-    name: "Greenville Downtown Airport",
-    city: "Greenville",
-    state: "SC",
-    latitude: 34.8479,
-    longitude: -82.3502,
-    visits: 3,
-    aircraft: "C172S",
-    lastFlown: "Jul 10, 2026"
-  },
-
-  {
-    code: "KRDU",
-    name: "Raleigh-Durham International Airport",
-    city: "Raleigh",
-    state: "NC",
-    latitude: 35.8801,
-    longitude: -78.7880,
-    visits: 2,
-    aircraft: "C172S",
-    lastFlown: "Jul 8, 2026"
-  },
-
-  {
-    code: "KMYR",
-    name: "Myrtle Beach International Airport",
-    city: "Myrtle Beach",
-    state: "SC",
-    latitude: 33.6797,
-    longitude: -78.9283,
-    visits: 2,
-    aircraft: "C172S",
-    lastFlown: "Jul 5, 2026"
-  },
-
-  {
-    code: "KSAV",
-    name: "Savannah / Hilton Head International Airport",
-    city: "Savannah",
-    state: "GA",
-    latitude: 32.1276,
-    longitude: -81.2021,
-    visits: 1,
-    aircraft: "C172S",
-    lastFlown: "Jun 30, 2026"
-  }
-
+  { code: "KAGC", name: "Allegheny County Airport", city: "Pittsburgh", state: "PA", latitude: 40.354401, longitude: -79.930199, visits: 2 },
+  { code: "KAKH", name: "Gastonia Municipal Airport", city: "Gastonia", state: "NC", latitude: 35.202598, longitude: -81.149902, visits: 8 },
+  { code: "KBUY", name: "Burlington-Alamance Regional Airport", city: "Burlington", state: "NC", latitude: 36.048500, longitude: -79.474899, visits: 3 },
+  { code: "KCRG", name: "Jacksonville Executive at Craig Airport", city: "Jacksonville", state: "FL", latitude: 30.336300, longitude: -81.514397, visits: 4 },
+  { code: "KDBN", name: "W. H. 'Bud' Barron Airport", city: "Dublin", state: "GA", latitude: 32.564400, longitude: -82.985298, visits: 2 },
+  { code: "KEQY", name: "Charlotte-Monroe Executive Airport", city: "Monroe", state: "NC", latitude: 35.018799, longitude: -80.620201, visits: 2 },
+  { code: "KEXX", name: "Davidson County Executive Airport", city: "Lexington", state: "NC", latitude: 35.781101, longitude: -80.303802, visits: 4 },
+  { code: "KFFA", name: "First Flight Airport", city: "Kill Devil Hills", state: "NC", latitude: 36.018200, longitude: -75.671303, visits: 2 },
+  { code: "KFHB", name: "Fernandina Beach Municipal Airport", city: "Fernandina Beach", state: "FL", latitude: 30.611799, longitude: -81.461197, visits: 2 },
+  { code: "KFME", name: "Fort Meade Executive Airport", city: "Fort Meade", state: "MD", latitude: 39.085400, longitude: -76.759399, visits: 2 },
+  { code: "KFQD", name: "Rutherford County-Marchman Field", city: "Rutherfordton", state: "NC", latitude: 35.428200, longitude: -81.935097, visits: 1 },
+  { code: "KGRD", name: "Greenwood County Airport", city: "Greenwood", state: "SC", latitude: 34.248699, longitude: -82.159103, visits: 2 },
+  { code: "KGSP", name: "Greenville-Spartanburg International Airport", city: "Greer", state: "SC", latitude: 34.895699, longitude: -82.218903, visits: 3 },
+  { code: "KHLX", name: "Twin County Airport", city: "Hillsville", state: "VA", latitude: 36.766102, longitude: -80.823601, visits: 2 },
+  { code: "KHSP", name: "Ingalls Field", city: "Hot Springs", state: "VA", latitude: 37.951401, longitude: -79.833900, visits: 4 },
+  { code: "KILM", name: "Wilmington International Airport", city: "Wilmington", state: "NC", latitude: 34.272345, longitude: -77.905117, visits: 4 },
+  { code: "KIPJ", name: "Lincolnton-Lincoln County Regional Airport", city: "Lincolnton", state: "NC", latitude: 35.483299, longitude: -81.161301, visits: 2 },
+  { code: "KISP", name: "Long Island MacArthur Airport", city: "Islip", state: "NY", latitude: 40.796324, longitude: -73.101703, visits: 5 },
+  { code: "KJQF", name: "Concord-Padgett Regional Airport", city: "Concord", state: "NC", latitude: 35.387798, longitude: -80.709099, visits: 206 },
+  { code: "KJWN", name: "John C. Tune Airport", city: "Nashville", state: "TN", latitude: 36.182400, longitude: -86.886703, visits: 2 },
+  { code: "KJZI", name: "Charleston Executive Airport", city: "Johns Island", state: "SC", latitude: 32.698238, longitude: -80.005675, visits: 2 },
+  { code: "KLRO", name: "Mount Pleasant Regional Airport - Faison Field", city: "Mount Pleasant", state: "SC", latitude: 32.897800, longitude: -79.782898, visits: 4 },
+  { code: "KMDH", name: "Southern Illinois Airport", city: "Murphysboro", state: "IL", latitude: 37.778099, longitude: -89.251999, visits: 2 },
+  { code: "KMRN", name: "Foothills Regional Airport", city: "Morganton", state: "NC", latitude: 35.820202, longitude: -81.611397, visits: 1 },
+  { code: "KPGV", name: "Pitt-Greenville Airport", city: "Greenville", state: "NC", latitude: 35.635535, longitude: -77.384262, visits: 2 },
+  { code: "KPIE", name: "St. Pete-Clearwater International Airport", city: "Clearwater", state: "FL", latitude: 27.910200, longitude: -82.687401, visits: 1 },
+  { code: "KPMZ", name: "Plymouth Municipal Airport", city: "Plymouth", state: "NC", latitude: 35.808399, longitude: -76.759300, visits: 2 },
+  { code: "KRDU", name: "Raleigh-Durham International Airport", city: "Raleigh/Durham", state: "NC", latitude: 35.878659, longitude: -78.787300, visits: 8 },
+  { code: "KRIC", name: "Richmond International Airport", city: "Richmond", state: "VA", latitude: 37.505199, longitude: -77.319702, visits: 1 },
+  { code: "KRUQ", name: "Mid-Carolina Regional Airport", city: "Salisbury", state: "NC", latitude: 35.645901, longitude: -80.520302, visits: 4 },
+  { code: "KSAV", name: "Savannah/Hilton Head International Airport", city: "Savannah", state: "GA", latitude: 32.126591, longitude: -81.199980, visits: 4 },
+  { code: "KSBY", name: "Salisbury-Ocean City Wicomico Regional Airport", city: "Salisbury", state: "MD", latitude: 38.340500, longitude: -75.510300, visits: 2 },
+  { code: "KSIF", name: "Rockingham County NC Shiloh Airport", city: "Stoneville", state: "NC", latitude: 36.437199, longitude: -79.850998, visits: 2 },
+  { code: "KSPA", name: "Spartanburg Downtown Memorial Airport", city: "Spartanburg", state: "SC", latitude: 34.915699, longitude: -81.956497, visits: 2 },
+  { code: "KSVH", name: "Statesville Regional Airport", city: "Statesville", state: "NC", latitude: 35.765301, longitude: -80.953903, visits: 317 },
+  { code: "KTTN", name: "Trenton-Mercer Airport", city: "Ewing", state: "NJ", latitude: 40.276699, longitude: -74.813499, visits: 1 },
+  { code: "KUZA", name: "Rock Hill-York County Airport", city: "Rock Hill", state: "SC", latitude: 34.987801, longitude: -81.057198, visits: 4 }
 ];
 
 
