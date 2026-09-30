@@ -124,13 +124,3 @@
     max-width: 780px;
     margin: 0 auto;
 }
-/* Fine-tune recommendations heading + button alignment */
-#recommendations .recommendations-copy h2 {
-    position: relative;
-    left: -18px;
-}
-
-#recommendations .recommendations-copy .button {
-    position: relative;
-    left: -18px;
-}
