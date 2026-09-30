@@ -134,6 +134,8 @@
     max-width: 780px;
     margin: 0 auto;
 }
-#recommendations {
-    background: red !important;
+#recommendations .recommendations-rolodex {
+    width: 100%;
+    max-width: 780px;
+    margin: 0 auto;
 }
