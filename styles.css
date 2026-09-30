@@ -124,3 +124,11 @@
     max-width: 780px;
     margin: 0 auto;
 }
+/* Precise alignment for recommendations heading and button */
+#recommendations .recommendations-copy h2 {
+    transform: translateX(-30px);
+}
+
+#recommendations .recommendations-copy > .button {
+    transform: translateX(-30px);
+}
