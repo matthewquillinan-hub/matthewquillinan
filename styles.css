@@ -95,3 +95,26 @@
     transition: none;
   }
 }
+/* Align entire recommendations section to one centerline */
+
+#recommendations .recommendations-grid {
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#recommendations .recommendations-copy {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#recommendations .recommendations-rolodex {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+}
