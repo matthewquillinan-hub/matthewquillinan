@@ -124,11 +124,64 @@
     max-width: 780px;
     margin: 0 auto;
 }
-/* Precise alignment for recommendations heading and button */
-#recommendations .recommendations-copy h2 {
-    transform: translateX(-30px);
+/* ==================================================
+   RECOMMENDATIONS — FINAL ALIGNMENT FIX
+   One shared centerline for the entire intro
+   ================================================== */
+
+#recommendations .recommendations-grid {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+#recommendations .recommendations-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    max-width: 760px;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+
+    padding-left: 0;
+    padding-right: 0;
+
+    text-align: center;
+}
+
+/* Every text element uses the parent's exact centerline */
+#recommendations .recommendations-copy > .eyebrow,
+#recommendations .recommendations-copy > h2,
+#recommendations .recommendations-copy > p {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    transform: none;
+    position: static;
+}
+
+/* Button participates in the same flex centerline */
 #recommendations .recommendations-copy > .button {
-    transform: translateX(-30px);
+    align-self: center;
+    margin-left: 0;
+    margin-right: 0;
+    transform: none;
+    position: static;
+}
+
+/* Keep the recommendation slider centered underneath */
+#recommendations .recommendations-rolodex {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
 }
